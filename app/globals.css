@@ -167,3 +167,40 @@ textarea { resize: vertical; }
   .assessment-form, .hero-card, .cta-panel, .success-card { padding: 20px; }
   .container { width: min(100% - 20px, 1120px); }
 }
+
+
+.narrow { max-width: 720px; }
+.hero-strong { padding-top: 44px; }
+.hero-card-strong { background: linear-gradient(180deg, #ffffff, #edf4ff); }
+.compact-proof { gap: 8px; }
+.three-up { grid-template-columns: repeat(3, 1fr); }
+.two-up { grid-template-columns: repeat(2, 1fr); }
+.info-card-compact h3 { margin-bottom: 8px; }
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+.pricing-card h3 { margin: 0 0 8px; }
+.price-tag { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 14px; }
+.pricing-card ul, .result-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.pricing-card-highlight { border-color: #bfd0ff; background: #f8faff; }
+.success-card-wide { width: min(980px, 100%); }
+.result-stack { display: grid; gap: 14px; margin: 22px 0; }
+.upsell-panel {
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.upsell-copy h2 { margin: 10px 0; font-size: clamp(1.6rem, 2.5vw, 2.3rem); letter-spacing: -0.03em; }
+.upsell-copy p { color: var(--muted); margin: 0 0 18px; line-height: 1.7; }
+@media (max-width: 960px) {
+  .three-up, .two-up { grid-template-columns: 1fr; }
+}

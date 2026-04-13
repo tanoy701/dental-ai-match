@@ -15,7 +15,7 @@ const challengeOptions = [
 ]
 
 const goalOptions = [
-  'Book more appointments',
+  'Recover lost revenue',
   'Reduce missed calls',
   'Reduce no-shows',
   'Save staff time',
@@ -32,7 +32,7 @@ function inferCategories(challenges = []) {
   if (joined.includes('missed calls') || joined.includes('repetitive questions')) mapped.add('AI Phone Answering')
   if (joined.includes('scheduling')) mapped.add('Appointment Scheduling')
   if (joined.includes('lead follow-up') || joined.includes('new patient')) mapped.add('Lead Follow-Up')
-  if (joined.includes('no-shows') || joined.includes('reminders')) mapped.add('No-Show Reduction')
+  if (joined.includes('no-shows') || joined.includes('reminders')) mapped.add('Patient Reminders')
   if (joined.includes('admin work') || joined.includes('front desk')) mapped.add('Front Desk Workflow Automation')
 
   if (!mapped.size) {
@@ -41,6 +41,28 @@ function inferCategories(challenges = []) {
   }
 
   return Array.from(mapped).slice(0, 3)
+}
+
+function inferPrimaryBottleneck(challenges = []) {
+  const joined = challenges.join(' | ').toLowerCase()
+
+  if (joined.includes('missed calls')) return 'Missed calls and lost new-patient opportunities'
+  if (joined.includes('no-shows') || joined.includes('reminders')) return 'No-shows and weak reminder workflow'
+  if (joined.includes('front desk') || joined.includes('admin work')) return 'Front desk overload and admin friction'
+  if (joined.includes('lead follow-up') || joined.includes('new patient')) return 'Slow lead follow-up and delayed booking'
+  if (joined.includes('repetitive questions')) return 'Repetitive patient questions draining staff time'
+
+  return 'Front-desk friction and inconsistent patient communication'
+}
+
+function inferBudget(challenges = []) {
+  const joined = challenges.join(' | ').toLowerCase()
+
+  if (joined.includes('missed calls') || joined.includes('no-shows') || joined.includes('front desk')) {
+    return '$300–$1,500/month depending on setup and support'
+  }
+
+  return '$300–$1,000/month for many focused tools'
 }
 
 export default function AssessmentForm() {
@@ -65,6 +87,8 @@ export default function AssessmentForm() {
   const [error, setError] = useState('')
 
   const recommended = useMemo(() => inferCategories(form.challenges), [form.challenges])
+  const bottleneck = useMemo(() => inferPrimaryBottleneck(form.challenges), [form.challenges])
+  const budgetHint = useMemo(() => inferBudget(form.challenges), [form.challenges])
 
   function toggleSelection(field, value) {
     setForm((current) => {
@@ -91,7 +115,7 @@ export default function AssessmentForm() {
       const response = await fetch('/api/assessment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, recommendedCategories: recommended })
+        body: JSON.stringify({ ...form, recommendedCategories: recommended, primaryBottleneck: bottleneck })
       })
 
       const result = await response.json()
@@ -102,7 +126,9 @@ export default function AssessmentForm() {
 
       const params = new URLSearchParams({
         name: form.practiceName,
-        categories: recommended.join(', ')
+        categories: recommended.join('|'),
+        bottleneck,
+        budgetHint
       })
       router.push(`/success?${params.toString()}`)
     } catch (submissionError) {
@@ -121,22 +147,16 @@ export default function AssessmentForm() {
         </label>
         <label>
           Website
-          <input value={form.website} onChange={(e) => updateField('website', e.target.value)} placeholder="https://" />
+          <input value={form.website} onChange={(e) => updateField('website', e.target.value)} placeholder="Optional" />
         </label>
-      </div>
-
-      <div className="form-grid two-col">
         <label>
           Contact name
           <input value={form.contactName} onChange={(e) => updateField('contactName', e.target.value)} required />
         </label>
         <label>
-          Contact role
+          Role
           <input value={form.contactRole} onChange={(e) => updateField('contactRole', e.target.value)} placeholder="Owner, office manager, etc." />
         </label>
-      </div>
-
-      <div className="form-grid two-col">
         <label>
           Email
           <input type="email" value={form.email} onChange={(e) => updateField('email', e.target.value)} required />
@@ -164,14 +184,14 @@ export default function AssessmentForm() {
           Locations
           <select value={form.locations} onChange={(e) => updateField('locations', e.target.value)}>
             <option>1 location</option>
-            <option>2-5 locations</option>
-            <option>6+ locations</option>
+            <option>2–3 locations</option>
+            <option>4+ locations</option>
           </select>
         </label>
       </div>
 
       <fieldset>
-        <legend>What are you trying to fix first?</legend>
+        <legend>What feels most costly right now?</legend>
         <div className="pill-grid">
           {challengeOptions.map((option) => (
             <button
@@ -187,7 +207,7 @@ export default function AssessmentForm() {
       </fieldset>
 
       <fieldset>
-        <legend>What outcome matters most?</legend>
+        <legend>What do you want most?</legend>
         <div className="pill-grid">
           {goalOptions.map((option) => (
             <button
@@ -207,16 +227,15 @@ export default function AssessmentForm() {
           Budget range
           <select value={form.budgetRange} onChange={(e) => updateField('budgetRange', e.target.value)}>
             <option>Under $1,000/month</option>
-            <option>$1,000-$3,000/month</option>
-            <option>$3,000-$7,500/month</option>
-            <option>$7,500+/month</option>
+            <option>$1,000–$3,000/month</option>
+            <option>$3,000+/month</option>
             <option>Not sure yet</option>
           </select>
         </label>
         <label>
           Timeline
           <select value={form.timeline} onChange={(e) => updateField('timeline', e.target.value)}>
-            <option>As soon as possible</option>
+            <option>Need help now</option>
             <option>Within 30 days</option>
             <option>Within 3 months</option>
             <option>Just exploring</option>
@@ -242,19 +261,20 @@ export default function AssessmentForm() {
 
       <label>
         Anything else we should know?
-        <textarea rows="5" value={form.notes} onChange={(e) => updateField('notes', e.target.value)} placeholder="Tell us about staffing, call volume, no-shows, or implementation concerns." />
+        <textarea rows="5" value={form.notes} onChange={(e) => updateField('notes', e.target.value)} placeholder="Call volume, staffing pressure, software limitations, or other context." />
       </label>
 
       <div className="recommend-box">
-        <span className="eyebrow">Likely best-fit categories</span>
-        <h3>{recommended.join(' • ')}</h3>
-        <p>We use your top workflow challenges to prioritize the solution categories most likely to improve patient communication and front-desk efficiency.</p>
+        <span className="eyebrow">Preview of your free snapshot</span>
+        <h3>{bottleneck}</h3>
+        <p><strong>Likely fix categories:</strong> {recommended.join(' • ')}</p>
+        <p><strong>Typical budget band:</strong> {budgetHint}</p>
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
 
       <button className="button button-primary button-full" type="submit" disabled={submitting}>
-        {submitting ? 'Submitting...' : 'Submit assessment'}
+        {submitting ? 'Submitting...' : 'Get my free snapshot'}
       </button>
     </form>
   )

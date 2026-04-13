@@ -14,17 +14,16 @@ export default function AssessmentPage() {
         <section className="section">
           <div className="container page-grid">
             <div className="sticky-copy">
-              <span className="eyebrow">Practice assessment</span>
-              <h1>Tell us where your front desk is under pressure.</h1>
+              <span className="eyebrow">Free Revenue Leak Snapshot</span>
+              <h1>Answer a few questions and see what to fix first.</h1>
               <p>
-                This intake is designed to surface the most relevant AI solution categories for dental practices.
-                Start with your actual bottlenecks: missed calls, no-shows, slow lead response, repetitive patient questions,
-                or administrative overload.
+                This short intake is built to surface the front-desk problems most likely to be hurting
+                response time, patient communication, and booked revenue.
               </p>
               <div className="checklist">
-                <div>Mobile friendly and quick to complete</div>
-                <div>Submissions saved to Supabase</div>
-                <div>Built for future shortlist and follow-up workflow</div>
+                <div>Fast enough for mobile</div>
+                <div>Immediate result after submission</div>
+                <div>Upgrade later only if you want reviewed guidance</div>
               </div>
             </div>
             <AssessmentForm />
