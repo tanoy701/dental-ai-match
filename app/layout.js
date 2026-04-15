@@ -1,14 +1,18 @@
 import './globals.css'
+import PageTracker from '@/components/PageTracker'
 
 export const metadata = {
   title: 'Match My Practice',
-  description: 'Find the right AI solution for your dental practice.'
+  description: 'Find out where your dental practice is losing revenue — and what to fix first.'
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PageTracker />
+        {children}
+      </body>
     </html>
   )
 }

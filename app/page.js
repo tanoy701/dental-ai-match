@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import SolutionsSection from '@/components/SolutionsSection'
 
 const painCards = [
   {
@@ -23,16 +24,19 @@ const painCards = [
 
 const steps = [
   {
-    title: 'See your leak in 5 minutes',
-    text: 'Answer a short intake. Get an instant result showing your primary bottleneck, what it\'s likely costing you, and the fix categories worth reviewing.'
+    title: 'Get your free Revenue Leak Snapshot',
+    text: 'Answer 8 short questions about your practice. Instant result: your #1 bottleneck, likely cost, and the fix categories most worth reviewing. No sales call. No email gate before results.',
+    cta: { href: '/assessment', label: 'Start free →' }
   },
   {
-    title: 'Get a reviewed priority plan for $149',
-    text: 'Stop guessing. A Quick Priority Review tells you exactly what to fix first — reviewed for your specific practice, not a generic list.'
+    title: 'Upgrade to a Quick Priority Review — $149',
+    text: 'A real human reviews your assessment and delivers a practice-specific report. Priority 1/2/3 fix order. Right solution categories for your situation. Budget guidance. One concrete next step. Delivered within 48 hours.',
+    cta: null
   },
   {
-    title: 'Go deeper only if you need it',
-    text: 'Upgrade to a full roadmap and vendor path for $350 more. Only pay the difference — no double-charging.'
+    title: 'Go deeper with a Detailed Solution Review — $499',
+    text: 'Full roadmap: specific vendor categories, what to ask before buying anything, implementation guidance, and a tailored plan for your practice size and budget. Already bought the $149 review? Upgrade for just $350 more.',
+    cta: null
   }
 ]
 
@@ -129,16 +133,24 @@ export default function HomePage() {
               <span className="eyebrow">How it works</span>
               <h2>Free in 5 minutes. A clear fix plan for $149. A full roadmap for $499.</h2>
             </div>
-            <div className="card-grid three-up">
-              {steps.map((step) => (
-                <article key={step.title} className="info-card info-card-compact">
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                </article>
+            <div className="steps-ladder">
+              {steps.map((step, i) => (
+                <div key={step.title} className="step-row">
+                  <div className="step-number">{i + 1}</div>
+                  <div className="step-body">
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                  {step.cta && (
+                    <Link href={step.cta.href} className="button button-primary">{step.cta.label}</Link>
+                  )}
+                </div>
               ))}
             </div>
           </div>
         </section>
+
+        <SolutionsSection />
 
         <section className="section muted-section" id="pricing">
           <div className="container">
