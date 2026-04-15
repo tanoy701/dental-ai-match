@@ -15,15 +15,16 @@ export default function AssessmentPage() {
           <div className="container page-grid">
             <div className="sticky-copy">
               <span className="eyebrow">Free Revenue Leak Snapshot</span>
-              <h1>Answer a few questions and see what to fix first.</h1>
+              <h1>Find out where your practice is losing money right now.</h1>
               <p>
-                This short intake is built to surface the front-desk problems most likely to be hurting
-                response time, patient communication, and booked revenue.
+                Takes 5 minutes. You\'ll see your primary revenue bottleneck, which fix categories fit your situation,
+                and what to address before spending anything on software.
               </p>
               <div className="checklist">
-                <div>Fast enough for mobile</div>
-                <div>Immediate result after submission</div>
-                <div>Upgrade later only if you want reviewed guidance</div>
+                <div>Instant result — no waiting, no sales call</div>
+                <div>Specific to your practice, not a generic checklist</div>
+                <div>Most practices spot $3k–$10k/month in recoverable leaks</div>
+                <div>Upgrade to a full reviewed plan for $149 after</div>
               </div>
             </div>
             <AssessmentForm />

@@ -265,16 +265,17 @@ export default function AssessmentForm() {
       </label>
 
       <div className="recommend-box">
-        <span className="eyebrow">Preview of your free snapshot</span>
-        <h3>{bottleneck}</h3>
-        <p><strong>Likely fix categories:</strong> {recommended.join(' • ')}</p>
-        <p><strong>Typical budget band:</strong> {budgetHint}</p>
+        <span className="eyebrow">Based on your answers so far</span>
+        <h3>⚠ {bottleneck}</h3>
+        <p><strong>Fix categories to review:</strong> {recommended.join(' • ')}</p>
+        <p><strong>Typical cost to fix:</strong> {budgetHint}</p>
+        <p style={{marginTop: '10px', fontSize: '0.92rem', color: 'var(--muted)'}}>Submit below to get your full free snapshot. Then decide if you want a reviewed $149 Priority Review with a specific fix order for your practice.</p>
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
 
       <button className="button button-primary button-full" type="submit" disabled={submitting}>
-        {submitting ? 'Submitting...' : 'Get my free snapshot'}
+        {submitting ? 'Analyzing your practice...' : 'Get my free Revenue Leak Snapshot →'}
       </button>
     </form>
   )
